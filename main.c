@@ -3,8 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#define ROWS 30
-#define COLS 30
+#define ROWS   30
+#define COLS   30
+#define ESCAPE 27
 
 void configure_buffer(bool buffer[ROWS][COLS]) {
   FILE *pattern = fopen("pattern.txt", "r");
@@ -66,6 +67,7 @@ int main() {
   noecho();
   cbreak();
   keypad(stdscr, TRUE);
+  nodelay(stdscr, TRUE);
 
   int rows, cols;
   getmaxyx(stdscr, rows, cols);
@@ -79,10 +81,15 @@ int main() {
   bool buffer[ROWS][COLS];
   configure_buffer(buffer);
 
+  int generations = 1;
   while (1) {
+    int ch = getch();
+    if (ch == ESCAPE) break;
     draw_buffer(buffer);
     refresh();
     calculate_next_generation(buffer);
+    mvprintw(1, 1, "Generation %d", generations++);
     usleep(100000 * 2);
   }
+  endwin();
 }

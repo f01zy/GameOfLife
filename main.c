@@ -55,7 +55,7 @@ void calculate_next_generation(bool buffer[ROWS][COLS]) {
       if (buffer[i][j]) {
         temp[i][j] = alive < 2 || alive > 3 ? false : true;
       } else if (!buffer[i][j]) {
-        temp[i][j] = alive >= 3 ? true : false;
+        temp[i][j] = alive == 3 ? true : false;
       }
     }
   }
